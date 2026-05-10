@@ -7,7 +7,7 @@ An AI-powered real-time smoke and fire detection system using live camera feeds.
 ## 🚀 Features
 
 - 📷 Live camera support (webcam or RTSP/IP camera)
-- 🤖 Dual AI mode — Claude Vision API or YOLOv8 (local)
+- 🤖 Local AI mode — YOLOv8 (no API required)
 - 📸 Auto-saves annotated snapshots on detection
 - 📧 Sends HTML email alerts with embedded image & timestamp
 - ⏱️ Cooldown system to prevent alert spam
@@ -22,7 +22,7 @@ An AI-powered real-time smoke and fire detection system using live camera feeds.
 smoke_tracker/
 ├── main.py          # Main agent loop
 ├── camera.py        # Camera capture & frame utilities
-├── detector.py      # AI detection (Claude Vision / YOLOv8)
+├── detector.py      # AI detection (YOLOv8)
 ├── alerter.py       # Email alert builder & sender
 ├── config.py        # All settings loaded from .env
 ├── .env             # Your secrets (never commit this!)
@@ -68,18 +68,16 @@ cp .env.example .env
 
 ## 🔑 Environment Variables
 
-| Variable            | Required          | Description                               |
-| ------------------- | ----------------- | ----------------------------------------- |
-| `ANTHROPIC_API_KEY` | Yes (Claude mode) | Your Anthropic API key                    |
-| `EMAIL_USER`        | Yes               | Gmail address used to send alerts         |
-| `EMAIL_PASS`        | Yes               | Gmail App Password (16-char)              |
-| `ALERT_EMAIL`       | Yes               | Recipient email for alerts                |
-| `CAMERA_SOURCE`     | No                | `0` for webcam, or RTSP URL               |
-| `FRAME_INTERVAL`    | No                | Seconds between captures (default: `3`)   |
-| `CONFIDENCE_THR`    | No                | Detection threshold 0–1 (default: `0.75`) |
-| `ALERT_COOLDOWN`    | No                | Seconds between emails (default: `60`)    |
-| `USE_CLAUDE`        | No                | `true` = Claude API, `false` = YOLOv8     |
-| `YOLO_MODEL_PATH`   | No                | Path to YOLOv8 `.pt` model file           |
+| Variable            | Required | Description                               |
+| ------------------- | -------- | ----------------------------------------- |
+| `EMAIL_USER`        | Yes      | Gmail address used to send alerts         |
+| `EMAIL_PASS`        | Yes      | Gmail App Password (16-char)              |
+| `ALERT_EMAIL`       | Yes      | Recipient email for alerts                |
+| `CAMERA_SOURCE`     | No       | `0` for webcam, or RTSP URL               |
+| `FRAME_INTERVAL`    | No       | Seconds between captures (default: `3`)   |
+| `CONFIDENCE_THR`    | No       | Detection threshold 0–1 (default: `0.75`) |
+| `ALERT_COOLDOWN`    | No       | Seconds between emails (default: `60`)    |
+| `YOLO_MODEL_PATH`   | No       | Path to YOLOv8 `.pt` model file           |
 
 ---
 
@@ -110,7 +108,7 @@ cp .env.example .env
 ```
 =======================================================
    🔥 Smoke Tracker Agent — Starting
-   Mode     : Claude Vision
+   Mode     : YOLOv8 (local)
    Interval : 3s per frame
 =======================================================
 
@@ -128,23 +126,13 @@ Press `Ctrl + C` to stop the agent gracefully.
 
 ---
 
-## 🤖 AI Detection Modes
-
-### Claude Vision (default)
-
-Uses Anthropic's multimodal API to analyze each frame. No local GPU required. Returns structured JSON with hazard type, confidence, severity, and description.
-
-```env
-USE_CLAUDE=true
-ANTHROPIC_API_KEY=sk-ant-...
-```
+## 🤖 AI Detection Mode
 
 ### YOLOv8 (local, no API cost)
 
 Runs entirely on your machine. Best used with a fine-tuned fire/smoke model.
 
 ```env
-USE_CLAUDE=false
 YOLO_MODEL_PATH=models/fire_smoke_yolov8n.pt
 ```
 
@@ -216,7 +204,6 @@ sudo systemctl start smoke-tracker
 ```
 opencv-python-headless
 pillow
-anthropic
 ultralytics
 python-dotenv
 schedule
@@ -243,5 +230,5 @@ MIT License — free to use, modify, and distribute.
 
 ## 🙋 Author
 
-Built with ❤️ using Python, OpenCV, and Anthropic Claude.  
+Built with ❤️ Faheem Tech.  
 Contributions and issues welcome!
